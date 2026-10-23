@@ -170,7 +170,11 @@ class Account {
 		require_once ABSPATH . 'wp-admin/includes/user.php';
 
 		wp_logout();
-		wp_delete_user( $user->ID );
+
+		// E.g. if it was already deleted by a second (double-clicked) request.
+		if ( ! wp_delete_user( $user->ID ) ) {
+			$failed[] = 'WordPress user: not deleted';
+		}
 
 		// The account is deleted anyway: by now, its subscriptions are cancelled and its customer may be anonymized.
 		$this->notify( $user, $customer, $emails, $subscriptions[ 'cancelled' ], $licenses, $messages, $failed );
@@ -242,7 +246,12 @@ class Account {
 
 			// Erasers work in pages, until they're done.
 			for ( $page = 1; $page <= 100; $page ++ ) {
-				$response = call_user_func( $eraser[ 'callback' ], $email, $page );
+				try {
+					$response = call_user_func( $eraser[ 'callback' ], $email, $page );
+				} catch ( \Throwable $e ) {
+					// Another plugin's eraser mustn't stop the deletion halfway: subscriptions are already cancelled.
+					$response = new \WP_Error( 'eraser_exception', $e->getMessage() );
+				}
 
 				if ( ! is_array( $response ) || ! is_array( $response[ 'messages' ] ?? [] ) ) {
 					$failed[] = $name . ': ' . ( is_wp_error( $response ) ? $response->get_error_message() : 'invalid response' );

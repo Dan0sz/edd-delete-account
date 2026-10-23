@@ -51,7 +51,7 @@ class Block {
 
 		// After deleting their account, the visitor is logged out and returns to this page.
 		if ( ! $user->exists() ) {
-			return isset( $_GET[ Account::DELETED ] ) ? $this->wrap( '<div class="edd-alert edd-alert-success"><p>' . wp_kses_post( $attributes[ 'deletedText' ] ?? '' ) . '</p></div>' ) : '';
+			return isset( $_GET[ Account::DELETED ] ) ? $this->wrap( $this->replace_site_name( '<div class="edd-alert edd-alert-success"><p>' . wp_kses_post( $attributes[ 'deletedText' ] ?? '' ) . '</p></div>' ) ) : '';
 		}
 
 		if ( ! Account::is_customer( $user ) ) {
@@ -91,7 +91,16 @@ class Block {
 			<?php
 		endif;
 
-		return $this->wrap( str_replace( self::SITE_NAME, esc_html( get_bloginfo( 'name' ) ), $content . ob_get_clean() ) );
+		return $this->wrap( $this->replace_site_name( $content . ob_get_clean() ) );
+	}
+
+	/**
+	 * @param string $html
+	 *
+	 * @return string
+	 */
+	private function replace_site_name( $html ) {
+		return str_replace( self::SITE_NAME, esc_html( get_bloginfo( 'name' ) ), $html );
 	}
 
 	/**
