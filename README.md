@@ -56,9 +56,42 @@ Statuses**.
 | `edd_delete_account_customer_roles` | filter | Roles of users who can delete their own account. Default: `subscriber`, `edd_subscriber`, `customer`. |
 | `edd_delete_account_blocked_reason` | filter | Why a customer can't delete their account (empty if they can). |
 | `edd_delete_account_notification_recipient` | filter | Who's emailed. Default: the site's admin email address. |
-| `edd_delete_account_notification_lines` | filter | The lines of that email. |
-| `edd_delete_account_before` | action | Before the account is deleted (subscriptions are already cancelled). |
-| `edd_delete_account_deleted` | action | After the account was deleted. |
+| `edd_delete_account_notification_lines` | filter | The lines of that email. Gets what the form submitted. |
+| `edd_delete_account_before_form` | action | Before the form, e.g. to add a message. |
+| `edd_delete_account_form_fields` | action | Inside the form, before the confirmation checkbox, e.g. to add fields. |
+| `edd_delete_account_after_form` | action | After the form. |
+| `edd_delete_account_before` | action | Before the account is deleted (subscriptions are already cancelled). Gets what the form submitted. |
+| `edd_delete_account_deleted` | action | After the account was deleted. Gets what the form submitted. |
+
+What the form submitted is passed unslashed, but not sanitized: sanitize it yourself.
+
+### Example: ask why they're leaving
+
+```php
+// Add a field to the form.
+add_action( 'edd_delete_account_form_fields', function () {
+	?>
+	<p>
+		<label for="leaving-reason">Why are you leaving? (optional)</label>
+		<textarea id="leaving-reason" name="leaving_reason" rows="3"></textarea>
+	</p>
+	<?php
+} );
+
+// Add the answer to the email you get when someone deletes their account.
+add_filter( 'edd_delete_account_notification_lines', function ( $lines, $user, $data ) {
+	$reason = sanitize_textarea_field( $data['leaving_reason'] ?? '' );
+
+	if ( $reason ) {
+		$lines[] = '';
+		$lines[] = 'Why they left: ' . $reason;
+	}
+
+	return $lines;
+}, 10, 3 );
+```
+
+To save it somewhere else instead, e.g. in a database table, use the `edd_delete_account_before` action: `function ( $user, $customer, $data )`. Don't store it with the user or customer: those are deleted or anonymized right after.
 
 ## Development
 

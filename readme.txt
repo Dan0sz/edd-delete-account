@@ -68,6 +68,10 @@ Yes, with the license key at checkout. They won't get renewal reminders anymore,
 
 Yes, with the `edd_delete_account_customer_roles` filter. Customers with other roles than these (default: subscriber, edd_subscriber and customer) can't. Use `edd_delete_account_blocked_reason` to prevent it for specific customers.
 
+= Can I ask customers why they're leaving? =
+
+Yes. Add a field to the form with the `edd_delete_account_form_fields` action, and read what was submitted in the `edd_delete_account_before` action (or add it to the admin email with the `edd_delete_account_notification_lines` filter). See the README on GitHub for an example.
+
 == Changelog ==
 
 = 1.0.1 =
