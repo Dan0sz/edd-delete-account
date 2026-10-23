@@ -75,7 +75,7 @@ Yes. Add a field to the form with the `edd_delete_account_form_fields` action, a
 == Changelog ==
 
 = 1.0.2 =
-* Added: hooks to add fields to the form (edd_delete_account_form_fields), e.g. to ask why a customer is leaving, and before and after it. What the form submitted is passed to edd_delete_account_before, edd_delete_account_deleted and edd_delete_account_notification_lines.
+* Added: hooks to add content before the form (edd_delete_account_before_form), fields inside it (edd_delete_account_form_fields), e.g. to ask why a customer is leaving, and content after it (edd_delete_account_after_form). What the form submitted is passed to edd_delete_account_before, edd_delete_account_deleted and edd_delete_account_notification_lines.
 
 = 1.0.1 =
 * Improved: in the block editor, the list items which are only shown to some customers are marked with * (customers with an active subscription) and ** (customers with license keys), explained in the block's About this block panel.
