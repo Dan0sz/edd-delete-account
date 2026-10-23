@@ -16,12 +16,12 @@
 		[ 'core/paragraph', { content: __( 'Deleting your account removes your personal data from {site_name}. This can\'t be undone.', 'edd-delete-account' ) } ],
 	];
 
-	// The list's items, in order. Items with a note are only shown to customers they apply to.
+	// The list's items, in order. Items with a mark are only shown to customers they apply to, explained in the sidebar.
 	const ITEMS = [
 		{ attribute: 'accountText' },
 		{ attribute: 'ordersText' },
-		{ attribute: 'subscriptionsText', note: __( 'Only shown to customers with an active subscription.', 'edd-delete-account' ) },
-		{ attribute: 'licensesText', note: __( 'Only shown to customers with license keys.', 'edd-delete-account' ) },
+		{ attribute: 'subscriptionsText', mark: '*', note: __( 'Only shown to customers with an active subscription (EDD Recurring Payments).', 'edd-delete-account' ) },
+		{ attribute: 'licensesText', mark: '**', note: __( 'Only shown to customers with license keys (EDD Software Licensing).', 'edd-delete-account' ) },
 		{ attribute: 'newsletterText' },
 	];
 
@@ -53,7 +53,14 @@
 						el(
 							'p',
 							null,
-							__( 'Items marked with an asterisk (*) are only shown to customers they apply to.', 'edd-delete-account' )
+							__( 'Some items in the list are only shown to customers they apply to:', 'edd-delete-account' )
+						),
+						el(
+							'ul',
+							null,
+							ITEMS.filter( ( item ) => item.mark ).map( ( item ) =>
+								el( 'li', { key: item.attribute }, el( 'strong', null, item.mark ), ' ', item.note )
+							)
 						),
 						el(
 							'p',
@@ -89,7 +96,7 @@
 							'li',
 							{ key: item.attribute, title: item.note },
 							text( item.attribute, { tagName: 'span' } ),
-							item.note ? ' *' : null
+							item.mark ? ' ' + item.mark : null
 						)
 					)
 				),
