@@ -52,7 +52,7 @@ Customers can only delete their own account, from the form shown to them while l
 
 = Are orders and invoices deleted? =
 
-Not paid ones. What happens to an order depends on its status, as set in Downloads > Settings > Policies > Privacy > Order Statuses. By default:
+By default, only failed and abandoned orders are deleted. What happens to an order depends on its status, as set in Downloads > Settings > Policies > Privacy > Order Statuses. By default:
 
 * Complete, refunded, revoked and pending orders are anonymized: the name, address lines and email address are removed, but what was bought, when, for how much, and the city, postcode and country are kept, because tax law requires it.
 * Failed and abandoned orders, which were never paid, are deleted.
