@@ -137,6 +137,8 @@ class Account {
 			exit;
 		}
 
+		// What the form submitted, incl. fields added with the edd_delete_account_form_fields action. Not sanitized.
+		$data          = wp_unslash( $_POST );
 		$customer      = self::get_customer( $user );
 		$emails        = array_unique( array_filter( [ $user->user_email, $customer->email ?? '' ] ) );
 		$subscriptions = $this->cancel_subscriptions( $user );
@@ -150,12 +152,13 @@ class Account {
 		}
 
 		/**
-		 * Fires before a customer's account is deleted.
+		 * Fires before a customer's account is deleted, e.g. to save why they're leaving.
 		 *
 		 * @param \WP_User           $user
 		 * @param \EDD_Customer|null $customer
+		 * @param array              $data     What the form submitted, unslashed but not sanitized.
 		 */
-		do_action( 'edd_delete_account_before', $user, $customer );
+		do_action( 'edd_delete_account_before', $user, $customer, $data );
 
 		$licenses = $this->detach_licenses( $user );
 		$messages = [];
@@ -177,15 +180,16 @@ class Account {
 		}
 
 		// The account is deleted anyway: by now, its subscriptions are cancelled and its customer may be anonymized.
-		$this->notify( $user, $customer, $emails, $subscriptions[ 'cancelled' ], $licenses, $messages, $failed );
+		$this->notify( $user, $customer, $emails, $subscriptions[ 'cancelled' ], $licenses, $messages, $failed, $data );
 
 		/**
 		 * Fires after a customer deleted their account.
 		 *
 		 * @param \WP_User $user   The deleted user.
 		 * @param string[] $emails Their email addresses.
+		 * @param array    $data   What the form submitted, unslashed but not sanitized.
 		 */
-		do_action( 'edd_delete_account_deleted', $user, $emails );
+		do_action( 'edd_delete_account_deleted', $user, $emails, $data );
 
 		wp_safe_redirect( add_query_arg( self::DELETED, 1, get_permalink() ?: home_url() ) );
 		exit;
@@ -307,10 +311,11 @@ class Account {
 	 * @param string[]           $licenses
 	 * @param string[]           $messages
 	 * @param string[]           $failed   Erasers which failed: their personal data may remain.
+	 * @param array              $data     What the form submitted.
 	 *
 	 * @return void
 	 */
-	private function notify( $user, $customer, $emails, $subscriptions, $licenses, $messages, $failed ) {
+	private function notify( $user, $customer, $emails, $subscriptions, $licenses, $messages, $failed, $data ) {
 		$lines = [
 			sprintf( 'A customer deleted their account on %s.', home_url() ),
 			'',
@@ -341,12 +346,14 @@ class Account {
 		}
 
 		/**
-		 * Filters the email to the site's admin after a customer deleted their account, e.g. to add what's kept elsewhere.
+		 * Filters the email to the site's admin after a customer deleted their account, e.g. to add what's kept elsewhere,
+		 * or why they left.
 		 *
 		 * @param string[] $lines
 		 * @param \WP_User $user  The deleted user.
+		 * @param array    $data  What the form submitted, unslashed but not sanitized.
 		 */
-		$lines = (array) apply_filters( 'edd_delete_account_notification_lines', $lines, $user );
+		$lines = (array) apply_filters( 'edd_delete_account_notification_lines', $lines, $user, $data );
 
 		$this->mail_admin( $failed ? 'Account deleted, but personal data may remain' : 'Account deleted', $lines );
 	}

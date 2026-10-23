@@ -75,9 +75,28 @@ class Block {
 					<li><?php echo wp_kses_post( $consequence ); ?></li>
 				<?php endforeach; ?>
 			</ul>
+			<?php
+			/**
+			 * Fires before the form, e.g. to add a message.
+			 *
+			 * @param \WP_User $user
+			 * @param array    $attributes The block's attributes.
+			 */
+			do_action( 'edd_delete_account_before_form', $user, $attributes );
+			?>
 			<form method="post" action="<?php echo esc_url( edd_get_current_page_url() ); ?>">
 				<?php wp_nonce_field( Account::ACTION ); ?>
 				<input type="hidden" name="action" value="<?php echo esc_attr( Account::ACTION ); ?>">
+				<?php
+				/**
+				 * Fires inside the form, before the confirmation checkbox, e.g. to add a field asking why they're leaving.
+				 * What's submitted is passed to the edd_delete_account_before action.
+				 *
+				 * @param \WP_User $user
+				 * @param array    $attributes The block's attributes.
+				 */
+				do_action( 'edd_delete_account_form_fields', $user, $attributes );
+				?>
 				<p>
 					<label>
 						<input type="checkbox" name="<?php echo esc_attr( Account::CONFIRM ); ?>" value="1" required>
@@ -89,6 +108,13 @@ class Block {
 				</p>
 			</form>
 			<?php
+			/**
+			 * Fires after the form.
+			 *
+			 * @param \WP_User $user
+			 * @param array    $attributes The block's attributes.
+			 */
+			do_action( 'edd_delete_account_after_form', $user, $attributes );
 		endif;
 
 		return $this->wrap( $this->replace_site_name( $content . ob_get_clean() ) );
