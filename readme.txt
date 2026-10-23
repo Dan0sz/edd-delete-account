@@ -3,7 +3,7 @@ Contributors: DaanvandenBergh
 Tags: easy digital downloads, gdpr, delete account, privacy, block
 Requires at least: 6.3
 Tested up to: 7.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.4
 License: MIT
 License URI: https://opensource.org/licenses/MIT
@@ -69,6 +69,9 @@ Yes, with the license key at checkout. They won't get renewal reminders anymore,
 Yes, with the `edd_delete_account_customer_roles` filter. Customers with other roles than these (default: subscriber, edd_subscriber and customer) can't. Use `edd_delete_account_blocked_reason` to prevent it for specific customers.
 
 == Changelog ==
+
+= 1.0.1 =
+* Improved: in the block editor, the list items which are only shown to some customers are marked with * (customers with an active subscription) and ** (customers with license keys), explained in the block's About this block panel.
 
 = 1.0.0 =
 * First release: the Delete Account block.
