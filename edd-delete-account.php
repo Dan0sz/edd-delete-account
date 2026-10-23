@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Easy Digital Downloads - Delete Account
  * Description: Lets customers delete their own account (GDPR's right to erasure) with a block, e.g. on your Account page.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Daan from Daan.dev
  * Author URI: https://daan.dev
  * GitHub Plugin URI: Dan0sz/edd-delete-account
