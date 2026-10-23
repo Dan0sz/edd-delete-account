@@ -3,7 +3,7 @@ Contributors: DaanvandenBergh
 Tags: easy digital downloads, gdpr, delete account, privacy, block
 Requires at least: 6.3
 Tested up to: 7.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.4
 License: MIT
 License URI: https://opensource.org/licenses/MIT
@@ -73,6 +73,9 @@ Yes, with the `edd_delete_account_customer_roles` filter. Customers with other r
 Yes. Add a field to the form with the `edd_delete_account_form_fields` action, and read what was submitted in the `edd_delete_account_before` action (or add it to the admin email with the `edd_delete_account_notification_lines` filter). See the README on GitHub for an example.
 
 == Changelog ==
+
+= 1.0.2 =
+* Added: hooks to add fields to the form (edd_delete_account_form_fields), e.g. to ask why a customer is leaving, and before and after it. What the form submitted is passed to edd_delete_account_before, edd_delete_account_deleted and edd_delete_account_notification_lines.
 
 = 1.0.1 =
 * Improved: in the block editor, the list items which are only shown to some customers are marked with * (customers with an active subscription) and ** (customers with license keys), explained in the block's About this block panel.
