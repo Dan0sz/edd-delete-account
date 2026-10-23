@@ -28,7 +28,7 @@ The block tells your customers what deleting their account does, and asks them t
 
 1. Their active subscriptions (EDD Recurring Payments) are cancelled at the payment gateway, so they're not charged again. If that fails, the account isn't deleted, and you're notified.
 2. Their license keys (EDD Software Licensing) are detached from the account. They keep working until they expire, and can still be renewed with the license key at checkout.
-3. WordPress' personal data erasers run, the same as Tools > Erase Personal Data. Easy Digital Downloads anonymizes the customer and their orders: what was bought, when, for how much and in which country is kept, for your taxes. Download logs, reviews, comments and AffiliateWP customer records are anonymized too.
+3. WordPress' personal data erasers run, the same as Tools > Erase Personal Data. Easy Digital Downloads anonymizes the customer, and anonymizes or deletes their orders depending on each order's status (see the FAQ). Download logs, reviews, comments and AffiliateWP customer records are anonymized too.
 4. If Brevo for Easy Digital Downloads is set up, the contact is deleted from Brevo.
 5. The WordPress user is deleted and logged out.
 6. You get an email with what was done, and what couldn't be erased, if anything.
@@ -52,7 +52,13 @@ Customers can only delete their own account, from the form shown to them while l
 
 = Are orders and invoices deleted? =
 
-No. Orders are anonymized: name, address and email address are removed, but what was bought, when, for how much and in which country is kept, because tax law requires it. Invoices in other systems (e.g. your accounting software) aren't touched.
+Not paid ones. What happens to an order depends on its status, as set in Downloads > Settings > Policies > Privacy > Order Statuses. By default:
+
+* Complete, refunded, revoked and pending orders are anonymized: the name, address lines and email address are removed, but what was bought, when, for how much, and the city, postcode and country are kept, because tax law requires it.
+* Failed and abandoned orders, which were never paid, are deleted.
+* Processing orders are left as they are, and their customer can't delete their account here. Renewals follow your setting for complete orders, unless you set Renewal yourself.
+
+Invoices in other systems (e.g. your accounting software) aren't touched.
 
 = Can a customer renew a license key after deleting their account? =
 

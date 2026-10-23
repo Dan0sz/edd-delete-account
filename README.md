@@ -14,14 +14,26 @@ checkbox label and button text are edited in the block editor, and it supports b
 2. Their license keys (EDD Software Licensing) are detached from the account: they keep working until they expire, and
    can still be renewed with the license key at checkout.
 3. WordPress' personal data erasers run (the same as Tools > Erase Personal Data): EDD anonymizes the customer and their
-   orders (what was bought, when, for how much and in which country is kept, for taxes), download logs, reviews,
-   comments and AffiliateWP customer records. If Brevo for EDD is set up, the contact is deleted from Brevo.
+   download logs, reviews, comments and AffiliateWP customer records, and anonymizes or deletes their orders depending
+   on each order's status (see below). If Brevo for EDD is set up, the contact is deleted from Brevo.
 4. The WordPress user is deleted and logged out, and sees a confirmation.
 5. You get an email with what was done, and which erasers failed, if any. If the email can't be sent, the report goes
    to PHP's error log.
 
 Staff, affiliates (AffiliateWP) and customers with orders EDD may not change (e.g. still processing) can't delete their
 account here: they're asked to contact you.
+
+## Orders
+
+What happens to a customer's orders depends on their status, as set in **Downloads > Settings > Policies > Privacy >
+Order Statuses**. By default:
+
+| Status | Default | |
+|---|---|---|
+| Complete, Refunded, Revoked, Pending | Anonymize | Name, address lines and email address are removed; what was bought, when, for how much, and the city, postcode and country are kept, for taxes. |
+| Failed, Abandoned | Delete | Never paid. |
+| Processing | Do Nothing | The customer can't delete their account here. |
+| Renewal (EDD Recurring) | Same as Complete | Unless you set it yourself: if it's Do Nothing, customers with a renewal can't delete their account here. |
 
 ## Installation
 
