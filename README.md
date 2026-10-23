@@ -35,6 +35,9 @@ Order Statuses**. By default:
 | Processing | Do Nothing | The customer can't delete their account here. |
 | Renewal (EDD Recurring) | Same as Complete | Unless you set it yourself: if it's Do Nothing, customers with a renewal can't delete their account here. |
 
+You can change this per status (Anonymize, Delete or Do Nothing) in **Downloads > Settings > Policies > Privacy > Order
+Statuses**.
+
 ## Installation
 
 1. Download the zip from the [latest release](https://github.com/Dan0sz/edd-delete-account/releases/latest), upload it

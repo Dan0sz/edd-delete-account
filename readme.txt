@@ -58,7 +58,7 @@ Not paid ones. What happens to an order depends on its status, as set in Downloa
 * Failed and abandoned orders, which were never paid, are deleted.
 * Processing orders are left as they are, and their customer can't delete their account here. Renewals follow your setting for complete orders, unless you set Renewal yourself.
 
-Invoices in other systems (e.g. your accounting software) aren't touched.
+You can change this per status (Anonymize, Delete or Do Nothing) in Downloads > Settings > Policies > Privacy > Order Statuses. Invoices in other systems (e.g. your accounting software) aren't touched.
 
 = Can a customer renew a license key after deleting their account? =
 
