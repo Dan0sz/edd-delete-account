@@ -7,6 +7,8 @@ The block lists what deleting the account does, and asks to confirm with a check
 checkbox label and button text are edited in the block editor, and it supports borders, colors and spacing.
 `{site_name}` is replaced with your site's name. The block is only shown to logged-in customers.
 
+![The Delete Account block on the Account page, with the confirmation checkbox checked](.github/screenshot.png)
+
 ## What happens when a customer deletes their account
 
 1. Their active subscriptions (EDD Recurring) are cancelled at the payment gateway, so they're not charged again. If
