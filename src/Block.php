@@ -119,7 +119,13 @@ class Block {
 			<?php endforeach; ?>
 		</ul>
 		<?php
+		/** This action is documented in src/Block.php */
+		do_action( 'edd_delete_account_before_form', $user, $attributes );
+
 		echo $this->get_form( $user, $attributes, true );
+
+		/** This action is documented in src/Block.php */
+		do_action( 'edd_delete_account_after_form', $user, $attributes );
 
 		return $this->wrap( $this->replace_site_name( ob_get_clean() ) );
 	}
