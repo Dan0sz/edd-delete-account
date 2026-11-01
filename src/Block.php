@@ -125,7 +125,7 @@ class Block {
 	}
 
 	/**
-	 * The form to delete the account. In a preview, it does nothing.
+	 * The form to delete the account. In a preview, it's disabled.
 	 *
 	 * @param \WP_User $user
 	 * @param array    $attributes

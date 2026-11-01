@@ -21,7 +21,7 @@ The block tells your customers what deleting their account does, and asks them t
 * Edit the heading, introduction, list, checkbox label and button text right in the block editor.
 * Style it with a border, colors and spacing.
 * `{site_name}` is replaced with your site's name.
-* Only logged-in customers see it. After deleting their account, they see a confirmation. Administrators see a preview, which doesn't do anything.
+* Only logged-in customers see it. After deleting their account, they see a confirmation. Administrators see a preview.
 * The list items about subscriptions and license keys are only shown to customers who have them.
 
 = What happens when a customer deletes their account =
@@ -75,7 +75,7 @@ Yes. Add a field to the form with the `edd_delete_account_form_fields` action, a
 == Changelog ==
 
 = 1.0.3 =
-* Improved: administrators see a preview of the block, which doesn't do anything, with a notice that they can't delete their account using it.
+* Improved: administrators now see a preview of the block.
 
 = 1.0.2 =
 * Added: hooks to add content before the form (edd_delete_account_before_form), fields inside it (edd_delete_account_form_fields), e.g. to ask why a customer is leaving, and content after it (edd_delete_account_after_form). What the form submitted is passed to edd_delete_account_before, edd_delete_account_deleted and edd_delete_account_notification_lines.
