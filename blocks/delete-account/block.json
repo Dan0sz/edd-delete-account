@@ -5,7 +5,7 @@
 	"title": "Delete Account",
 	"category": "widgets",
 	"icon": "trash",
-	"description": "Lets logged-in customers delete their own account. Only shown to customers, e.g. below the profile editor on your Account page.",
+	"description": "Lets logged-in customers delete their own account. Only shown to customers (administrators see a preview), e.g. below the profile editor on your Account page.",
 	"textdomain": "edd-delete-account",
 	"attributes": {
 		"accountText": {
