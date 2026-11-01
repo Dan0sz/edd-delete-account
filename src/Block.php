@@ -111,7 +111,7 @@ class Block {
 	private function render_preview( $attributes, $content, $user ) {
 		ob_start();
 		?>
-		<div class="edd-alert edd-alert-info"><p><?php esc_html_e( 'Administrators can\'t delete their account using this block. A preview is shown.', 'edd-delete-account' ); ?></p></div>
+		<div class="edd-alert edd-alert-info"><p><?php esc_html_e( 'Administrators can\'t delete their account using this block. This is a preview.', 'edd-delete-account' ); ?></p></div>
 		<?php echo $content; ?>
 		<ul>
 			<?php foreach ( $this->get_consequences( $user, $attributes, true ) as $consequence ) : ?>
