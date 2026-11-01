@@ -54,8 +54,9 @@ class Block {
 			return isset( $_GET[ Account::DELETED ] ) ? $this->wrap( $this->replace_site_name( '<div class="edd-alert edd-alert-success"><p>' . wp_kses_post( $attributes[ 'deletedText' ] ?? '' ) . '</p></div>' ) ) : '';
 		}
 
+		// Administrators can't delete their account here, but see a preview of the block.
 		if ( ! Account::is_customer( $user ) ) {
-			return '';
+			return current_user_can( 'manage_options' ) ? $this->render_preview( $attributes, $content, $user ) : '';
 		}
 
 		$blocked = Account::get_blocked_reason( $user );
@@ -84,9 +85,70 @@ class Block {
 			 */
 			do_action( 'edd_delete_account_before_form', $user, $attributes );
 			?>
+			<?php echo $this->get_form( $user, $attributes ); ?>
+			<?php
+			/**
+			 * Fires after the form.
+			 *
+			 * @param \WP_User $user
+			 * @param array    $attributes The block's attributes.
+			 */
+			do_action( 'edd_delete_account_after_form', $user, $attributes );
+		endif;
+
+		return $this->wrap( $this->replace_site_name( $content . ob_get_clean() ) );
+	}
+
+	/**
+	 * What administrators see: a notice, and the block as customers see it, but not interactive.
+	 *
+	 * @param array    $attributes
+	 * @param string   $content
+	 * @param \WP_User $user
+	 *
+	 * @return string
+	 */
+	private function render_preview( $attributes, $content, $user ) {
+		ob_start();
+		?>
+		<div class="edd-alert edd-alert-info"><p><?php esc_html_e( 'Administrators can\'t delete their account using this block. This is a preview.', 'edd-delete-account' ); ?></p></div>
+		<?php echo $content; ?>
+		<ul>
+			<?php foreach ( $this->get_consequences( $user, $attributes, true ) as $consequence ) : ?>
+				<li><?php echo wp_kses_post( $consequence ); ?></li>
+			<?php endforeach; ?>
+		</ul>
+		<?php
+		/** This action is documented in src/Block.php */
+		do_action( 'edd_delete_account_before_form', $user, $attributes );
+
+		echo $this->get_form( $user, $attributes, true );
+
+		/** This action is documented in src/Block.php */
+		do_action( 'edd_delete_account_after_form', $user, $attributes );
+
+		return $this->wrap( $this->replace_site_name( ob_get_clean() ) );
+	}
+
+	/**
+	 * The form to delete the account. In a preview, it's disabled.
+	 *
+	 * @param \WP_User $user
+	 * @param array    $attributes
+	 * @param bool     $preview
+	 *
+	 * @return string
+	 */
+	private function get_form( $user, $attributes, $preview = false ) {
+		ob_start();
+		?>
+			<?php if ( $preview ) : ?>
+			<form inert>
+			<?php else : ?>
 			<form method="post" action="<?php echo esc_url( edd_get_current_page_url() ); ?>">
 				<?php wp_nonce_field( Account::ACTION ); ?>
 				<input type="hidden" name="action" value="<?php echo esc_attr( Account::ACTION ); ?>">
+			<?php endif; ?>
 				<?php
 				/**
 				 * Fires inside the form, before the confirmation checkbox, e.g. to add a field asking why they're leaving.
@@ -99,25 +161,17 @@ class Block {
 				?>
 				<p>
 					<label>
-						<input type="checkbox" name="<?php echo esc_attr( Account::CONFIRM ); ?>" value="1" required>
+						<input type="checkbox" name="<?php echo esc_attr( Account::CONFIRM ); ?>" value="1" <?php echo $preview ? 'disabled' : 'required'; ?>>
 						<?php echo wp_kses_post( $attributes[ 'confirmLabel' ] ?? '' ); ?>
 					</label>
 				</p>
 				<p>
-					<button type="submit" class="button edd-delete-account-button"><?php echo wp_kses_post( $attributes[ 'buttonText' ] ?? '' ); ?></button>
+					<button type="submit" class="button edd-delete-account-button"<?php echo $preview ? ' disabled' : ''; ?>><?php echo wp_kses_post( $attributes[ 'buttonText' ] ?? '' ); ?></button>
 				</p>
 			</form>
-			<?php
-			/**
-			 * Fires after the form.
-			 *
-			 * @param \WP_User $user
-			 * @param array    $attributes The block's attributes.
-			 */
-			do_action( 'edd_delete_account_after_form', $user, $attributes );
-		endif;
+		<?php
 
-		return $this->wrap( $this->replace_site_name( $content . ob_get_clean() ) );
+		return ob_get_clean();
 	}
 
 	/**
@@ -156,17 +210,18 @@ class Block {
 	 *
 	 * @param \WP_User $user
 	 * @param array    $attributes
+	 * @param bool     $all        All of them, e.g. in a preview.
 	 *
 	 * @return string[]
 	 */
-	private function get_consequences( $user, $attributes ) {
+	private function get_consequences( $user, $attributes, $all = false ) {
 		$texts = [ 'accountText', 'ordersText' ];
 
-		if ( Account::get_active_subscriptions( $user ) ) {
+		if ( $all || Account::get_active_subscriptions( $user ) ) {
 			$texts[] = 'subscriptionsText';
 		}
 
-		if ( Account::get_licenses( $user ) ) {
+		if ( $all || Account::get_licenses( $user ) ) {
 			$texts[] = 'licensesText';
 		}
 

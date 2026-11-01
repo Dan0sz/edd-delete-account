@@ -5,7 +5,8 @@ block you place on e.g. your Account page, below the profile editor.
 
 The block lists what deleting the account does, and asks to confirm with a checkbox. Its heading, introduction, list,
 checkbox label and button text are edited in the block editor, and it supports borders, colors and spacing.
-`{site_name}` is replaced with your site's name. The block is only shown to logged-in customers.
+`{site_name}` is replaced with your site's name. The block is only shown to logged-in customers;
+administrators see a preview.
 
 ![The Delete Account block on the Account page, with the confirmation checkbox checked](.github/screenshot.png)
 
